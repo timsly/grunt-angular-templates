@@ -54,8 +54,12 @@ module.exports = function(grunt) {
       }
 
       if (options.append){
-        fs.appendFileSync(file.dest, compiled.join('\n'));
-        grunt.log.writeln('File ' + file.dest.cyan + ' updated.');
+        var dest = grunt.util.kindOf(options.append) === 'function' &&
+          options.append.call(null, grunt) ||
+          file.dest;
+
+        fs.appendFileSync(dest, compiled.join('\n'));
+        grunt.log.writeln('File ' + dest.cyan + ' updated.');
       }
       else{
         grunt.file.write(file.dest, compiled.join('\n'));
